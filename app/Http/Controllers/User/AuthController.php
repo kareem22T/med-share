@@ -23,7 +23,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Invalid content type'], 400);
         }
 
-        $validator = Validator::make($request->json()->all(), [
+        $validator = Validator::make($request->all(), [
             "name" => ["required"],
             "email" => ["required", "email", "unique:users,email"],
             "phone" => ["required", "unique:users,phone"],
