@@ -28,7 +28,7 @@ class AuthController extends Controller
             "email" => ["required", "email", "unique:users,email"],
             "phone" => ["required", "unique:users,phone"],
             "pharmacy_name" => ["required"],
-            'signature' => "required|max:2048|image|mimes:jpeg,png,jpg,gif",
+            'signature' => "required|max:2048|image|mimes:jpeg,png,jpg,gif|max:2048",
             'password' => [
                 'required', // Required only if joined_with is 1
                 'min:8',
