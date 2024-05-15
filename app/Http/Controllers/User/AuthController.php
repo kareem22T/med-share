@@ -65,6 +65,8 @@ class AuthController extends Controller
             );
         }
 
+        return $request->signature;
+
         $image = $this->saveImg($request->signature, 'images/uploads/Users/Signature', $request->email);
 
         $user = User::create([
