@@ -28,7 +28,8 @@ class AuthController extends Controller
             'password' => [
                 'required', // Required only if joined_with is 1
                 'min:8',
-                'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/u'
+                'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/u',
+                'confirmed'
             ],
         ], [
             "name.required" => "ادخل اسمك الثلاثي",
@@ -213,8 +214,7 @@ class AuthController extends Controller
                 "",
                 [$validator->errors()->first()],
                 [],
-                [],
-                422
+                []
             );
         }
 
