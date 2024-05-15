@@ -24,7 +24,7 @@ class AuthController extends Controller
             "email" => ["required", "email", "unique:users,email"],
             "phone" => ["required", "unique:users,phone"],
             "pharmacy_name" => ["required"],
-            'signature' => "required|image|mimes:jpeg,png,jpg,gif|max:2048",
+            'signature' => "required|max:2048",
             'password' => [
                 'required', // Required only if joined_with is 1
                 'min:8',
@@ -35,7 +35,7 @@ class AuthController extends Controller
             "name.required" => "ادخل اسمك الثلاثي",
             "pharmacy_name.required" => "ادخل اسم الصيدلية",
             "signature.required" => "ارفع صورة الختم ع ورقة بيضة",
-            "signature.image" => "من فضلك ارفع صورة صالحة",
+            "signature.image" => "من فضلك ارفع صورة صالحة بين jpeg,png,jpg,gif",
             "signature.mimes" => "يجب ان تكون الصورة بين هذه الصيغ (jpeg, png, jpg, gif)",
             "signature.max" => "يجب الا يتعدى حجم الصورة 2 ميجا",
             "name.regex" => "ادخل الاسم ثلاثي",
