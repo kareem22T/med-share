@@ -73,8 +73,8 @@ class AuthController extends Controller
             "email" => $request->email,
             "phone" => $request->phone,
             "signature" => '/images/uploads/Users/Signature' . $image,
-            "is_phone_verified" => false,
-            "is_email_verified" => false,
+            "is_phone_verified" => 0,
+            "is_email_verified" => 0,
             "password" => Hash::make($request->password),
         ]);
 
