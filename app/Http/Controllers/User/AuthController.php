@@ -20,7 +20,7 @@ class AuthController extends Controller
 
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
-            "name" => ["required", 'regex:/^[\p{L} ]{3,}\s[\p{L} ]{3,}\s[\p{L} ]{3,}$/u'],
+            "name" => ["required"],
             "email" => ["required", "email", "unique:users,email"],
             "phone" => ["required", "unique:users,phone"],
             "pharmacy_name" => ["required"],
