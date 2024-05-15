@@ -178,7 +178,7 @@ class AuthController extends Controller
                         []
                     );
                 } else {
-                    $user->is_email_verified = true;
+                    $user->is_email_verified = 1;
                     $user->save();
 
                     if ($user) {
