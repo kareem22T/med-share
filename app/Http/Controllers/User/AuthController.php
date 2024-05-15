@@ -28,7 +28,7 @@ class AuthController extends Controller
             "email" => ["required", "email", "unique:users,email"],
             "phone" => ["required", "unique:users,phone"],
             "pharmacy_name" => ["required"],
-            // 'signature' => "required|max:2048",
+            'signature' => "required|max:2048",
             'password' => [
                 'required', // Required only if joined_with is 1
                 'min:8',
@@ -65,14 +65,14 @@ class AuthController extends Controller
             );
         }
 
-        // $image = $this->saveImg($request->signature, 'images/uploads/Users/Signature', $request->email);
+        $image = $this->saveImg($request->signature, 'images/uploads/Users/Signature', $request->email);
 
         $user = User::create([
             "name" => $request->name,
             "pharmacy_name" => $request->pharmacy_name,
             "email" => $request->email,
             "phone" => $request->phone,
-            "signature" => "dddd",
+            "signature" => '/images/uploads/Users/Signature' . $image,
             "is_phone_verified" => false,
             "is_email_verified" => false,
             "password" => Hash::make($request->password),
