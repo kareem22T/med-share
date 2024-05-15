@@ -28,8 +28,7 @@ class AuthController extends Controller
             'password' => [
                 'required', // Required only if joined_with is 1
                 'min:8',
-                'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/u',
-                'confirmed'
+                'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/u'
             ],
         ], [
             "name.required" => "ادخل اسمك الثلاثي",
@@ -197,7 +196,8 @@ class AuthController extends Controller
             'password' => [
                 'required', // Required only if joined_with is 1
                 'min:8',
-                'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/u'
+                'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/u',
+                'confirmed'
             ],
         ], [
             "old_password.required" => "ادخل كلمة المرور الحالية",
