@@ -19,8 +19,7 @@ class AuthController extends Controller
     use HandleResponseTrait, SaveImageTrait, DeleteImageTrait, SendEmailTrait;
 
     public function register(Request $request) {
-        return $request;
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->json()->all(), [
             "name" => ["required"],
             "email" => ["required", "email", "unique:users,email"],
             "phone" => ["required", "unique:users,phone"],
@@ -30,7 +29,7 @@ class AuthController extends Controller
                 'required', // Required only if joined_with is 1
                 'min:8',
                 'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/u',
-                // 'confirmed'
+                'confirmed'
             ],
         ], [
             "name.required" => "ادخل اسمك الثلاثي",
@@ -57,7 +56,9 @@ class AuthController extends Controller
                 "",
                 [$validator->errors()->first()],
                 [],
-                []
+                [
+                    "request" => $request
+                ],
             );
         }
 
