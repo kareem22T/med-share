@@ -19,6 +19,7 @@ class AuthController extends Controller
     use HandleResponseTrait, SaveImageTrait, DeleteImageTrait, SendEmailTrait;
 
     public function register(Request $request) {
+        return $request;
         $validator = Validator::make($request->all(), [
             "name" => ["required"],
             "email" => ["required", "email", "unique:users,email"],
