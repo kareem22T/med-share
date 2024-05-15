@@ -4,7 +4,7 @@ namespace App;
 
 trait HandleResponseTrait
 {
-    public function handleResponse($status, $msg, $errors, $data, $notes)
+    public function handleResponse($status, $msg, $errors, $data, $notes, $statusCode = 200)
     {
       return response()->json([
         "status" => $status,
@@ -12,6 +12,6 @@ trait HandleResponseTrait
         "errors" => $errors,
         "data" => $data,
         "notes" => $notes
-      ]);
+      ], $statusCode);
     }
 }

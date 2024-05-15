@@ -197,8 +197,7 @@ class AuthController extends Controller
             'password' => [
                 'required', // Required only if joined_with is 1
                 'min:8',
-                'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/u',
-                'confirmed'
+                'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/u'
             ],
         ], [
             "old_password.required" => "ادخل كلمة المرور الحالية",
@@ -214,7 +213,8 @@ class AuthController extends Controller
                 "",
                 [$validator->errors()->first()],
                 [],
-                []
+                [],
+                422
             );
         }
 
