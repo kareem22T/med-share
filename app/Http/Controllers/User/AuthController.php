@@ -29,7 +29,7 @@ class AuthController extends Controller
                 'required', // Required only if joined_with is 1
                 'min:8',
                 'regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/u',
-                'confirmed'
+                // 'confirmed'
             ],
         ], [
             "name.required" => "ادخل اسمك الثلاثي",
