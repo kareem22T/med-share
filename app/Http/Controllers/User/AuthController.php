@@ -377,30 +377,6 @@ class AuthController extends Controller
         $code = $request->code;
 
         if ($user) {
-            if ((int) $user->joined_with === 2)
-            return $this->handleResponse(
-                true,
-                "",
-                ["هذا الحساب مسجل بواسطة جوجل يمكنك الدخول باستخدام التسجيل بجوجل"],
-                [],
-                [
-                    "code get expired after 10 minuts",
-                    "the same endpoint you can use for ask resend email"
-                ]
-            );
-
-            if ((int) $user->joined_with === 3)
-                return $this->handleResponse(
-                    true,
-                    "",
-                    ["هذا الحساب مسجل بواسطة فيسبوك يمكنك الدخول باستخدام التسجيل بفيسبوك"],
-                    [],
-                    [
-                        "code get expired after 10 minuts",
-                        "the same endpoint you can use for ask resend email"
-                    ]
-                );
-
             if (!Hash::check($code, $user->email_last_verfication_code)) {
                 return $this->handleResponse(
                     false,
