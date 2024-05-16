@@ -184,7 +184,7 @@ class AuthController extends Controller
                     if ($user) {
                         return $this->handleResponse(
                             true,
-                            "تم تغير كلمة المرور بنجاح",
+                            "تم تاكيد بريدك الالكتروني بنجاح",
                             [],
                             [],
                             []
@@ -237,7 +237,7 @@ class AuthController extends Controller
                 );
             }
 
-            $user->password = Hash::make($user->password);
+            $user->password = Hash::make($request->password);
             $user->save();
 
             return $this->handleResponse(
