@@ -184,7 +184,7 @@ class AuthController extends Controller
                     if ($user) {
                         return $this->handleResponse(
                             true,
-                            "تم تاكيد بريدك الالكتروني بنجاح",
+                            "تم تغير كلمة المرور بنجاح",
                             [],
                             [],
                             []
