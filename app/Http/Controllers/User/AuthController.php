@@ -377,7 +377,7 @@ class AuthController extends Controller
         $code = $request->code;
 
         if ($user) {
-            if (!Hash::check($code, $user->email_last_verfication_code ? $user->email_last_verfication_code : 0000)) {
+            if (!Hash::check($code, $user->email_last_verfication_code ? $user->email_last_verfication_code : Hash::make(0000))) {
                 return $this->handleResponse(
                     false,
                     "",
