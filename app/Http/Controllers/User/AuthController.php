@@ -353,13 +353,62 @@ class AuthController extends Controller
                 'confirmed'
             ],
         ], [
-            "code.required" => "ادخل رمز التاكيد ",
             "email.required" => "من فضلك ادخل بريدك الاكتروني ",
             "email.email" => "من فضلك ادخل بريد الكتروني صالح",
             "password.required" => "ادخل كلمة المرور",
             "password.min" => "يجب ان تكون كلمة المرور من 8 احرف على الاقل",
             "password.regex" => "يجب ان تحتوي كلمة المرور علي حروف وارقام ورموز",
             "password.confirmed" => "كلمة المرور والتاكيد غير متطابقان",
+        ]);
+
+        if ($validator->fails()) {
+            return $this->handleResponse(
+                false,
+                "",
+                [$validator->errors()->first()],
+                [],
+                []
+            );
+        }
+
+
+        $user = User::where("email", $request->email)->first();
+        $code = $request->code;
+
+        if ($user) {
+            $user->password = Hash::make($request->password);
+            $user->save();
+
+            if ($user) {
+                return $this->handleResponse(
+                    true,
+                    "تم تعين كلمة المرور بنجاح ",
+                    [],
+                    [],
+                    []
+                );
+            }
+        }
+        else {
+            return $this->handleResponse(
+                false,
+                "",
+                ["هذا الحساب غير مسجل"],
+                [],
+                []
+            );
+        }
+
+    }
+
+    public function forgetPasswordCheckCode(Request $request) {
+        $validator = Validator::make($request->all(), [
+            "email" => ["required", "email"],
+            "code" => ["required"],
+        ], [
+            "code.required" => "ادخل رمز التاكيد ",
+            "email.required" => "من فضلك ادخل بريدك الاكتروني ",
+            "email.email" => "من فضلك ادخل بريد الكتروني صالح",
         ]);
 
         if ($validator->fails()) {
@@ -397,13 +446,10 @@ class AuthController extends Controller
                         []
                     );
                 } else {
-                    $user->password = Hash::make($request->password);
-                    $user->save();
-
                     if ($user) {
                         return $this->handleResponse(
                             true,
-                            "تم تعين كلمة المرور بنجاح ",
+                            "الرمز صحيح",
                             [],
                             [],
                             []
