@@ -345,7 +345,6 @@ class AuthController extends Controller
     public function forgetPassword(Request $request) {
         $validator = Validator::make($request->all(), [
             "email" => ["required", "email"],
-            "code" => ["required"],
             'password' => [
                 'required', // Required only if joined_with is 1
                 'min:8',
