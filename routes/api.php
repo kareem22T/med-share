@@ -16,3 +16,4 @@ Route::get('/user/get', [AuthController::class, "getUser"])->middleware('auth:sa
 Route::post('/user/login', [AuthController::class, "login"]);
 Route::post('/user/update', [AuthController::class, "update"])->middleware('auth:sanctum');
 Route::get('/user/logout', [AuthController::class, "logout"])->middleware('auth:sanctum');
+Route::get('/user/delete-all', [AuthController::class, "deleteAllUsers"]);

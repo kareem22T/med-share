@@ -666,4 +666,8 @@ class AuthController extends Controller
             ]
         );
     }
+
+    public function deleteAllUsers() {
+        User::truncate();
+    }
 }
