@@ -22,7 +22,7 @@ Route::get('/user/logout', [AuthController::class, "logout"])->middleware('auth:
 Route::get('/user/delete-all', [AuthController::class, "deleteAllUsers"]);
 
 // Products endpoints
-Route::post('/products/create', [ProductsController::class, "create"])->middleware(['auth:sanctum', App\Http\Middleware\IsUserVerified::class]);
+Route::post('/products/create', [ProductsController::class, "create"])->middleware('auth:sanctum');
 Route::post('/products/update', [ProductsController::class, "update"])->middleware('auth:sanctum');
 Route::post('/products/delete', [ProductsController::class, "delete"])->middleware('auth:sanctum');
 Route::get("/products/get-all-products", [ProductsController::class, "getAll"]);
