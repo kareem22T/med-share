@@ -16,7 +16,7 @@ class IsUserVerified
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user;
-        if ($user && $user->is_email_verified)
+        if ($user && !$user->is_email_verified)
             return response()->json([
                 "status" => false,
                 "message" => "فشل العملية",
