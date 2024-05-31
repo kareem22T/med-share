@@ -7,6 +7,7 @@ use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\ProductsController;
 use App\Http\Controllers\User\WishlistController;
 use App\Http\Controllers\User\OrdersController;
+use App\Http\Controllers\User\SuggestionsController;
 
 // Users endpoints
 Route::post("/user/register", [AuthController::class, "register"]);
@@ -54,3 +55,7 @@ Route::get("/orders/user/search/pagination", [OrdersController::class, "searchOr
 // Requests endpoints
 Route::get("/requests/user/all", [OrdersController::class, "requestsAll"])->middleware('auth:sanctum');
 Route::get("/requests/user/pagination", [OrdersController::class, "requestsAll"])->middleware('auth:sanctum');
+
+// Suggestions endpoints
+Route::post("/suggestions/send", [SuggestionsController::class, "placeSuggestion"]);
+

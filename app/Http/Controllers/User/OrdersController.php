@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\HandleResponseTrait;
+use App\SendEmailTrait;
 use App\Models\Order;
 use App\Models\Money_request;
 use App\Models\Product;
@@ -13,7 +14,6 @@ use App\Models\Request as Order_request;
 use App\Models\Ordered_Product;
 use App\Models\Request_product;
 use Illuminate\Support\Facades\Validator;
-use App\SendEmailTrait;
 use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
