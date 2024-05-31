@@ -28,7 +28,7 @@ trait SendEmailTrait
             //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
             //Recipients
-            $mail->setFrom('kotbekareem74@gmail.com', 'Project x | Tager alternative');
+            $mail->setFrom('kotbekareem74@gmail.com', 'Med Share');
             $mail->addAddress($receiver_mail); //Add a recipient
             $mail->CharSet = 'UTF-8';
 

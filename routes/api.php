@@ -6,6 +6,7 @@ use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\ProductsController;
 use App\Http\Controllers\User\WishlistController;
+use App\Http\Controllers\User\OrdersController;
 
 // Users endpoints
 Route::post("/user/register", [AuthController::class, "register"]);
@@ -41,3 +42,15 @@ Route::get("/cart/get", [CartController::class, "getCartDetails"])->middleware('
 // Wishlist endpoints
 Route::post("/wishlist/add-or-remove-product", [WishlistController::class, "addOrDeleteProductWishlist"])->middleware('auth:sanctum');
 Route::get("/wishlist/get", [WishlistController::class, "getWishlist"])->middleware('auth:sanctum');
+
+// Orders endpoints
+Route::post("/orders/place", [OrdersController::class, "placeOrder"])->middleware('auth:sanctum');
+Route::get("/orders/order/{id}", [OrdersController::class, "order"])->middleware('auth:sanctum');
+Route::get("/orders/user/all", [OrdersController::class, "ordersAll"])->middleware('auth:sanctum');
+Route::get("/orders/user/pagination", [OrdersController::class, "ordersPagination"])->middleware('auth:sanctum');
+Route::get("/orders/user/search/all", [OrdersController::class, "searchOrdersAll"])->middleware('auth:sanctum');
+Route::get("/orders/user/search/pagination", [OrdersController::class, "searchOrdersPagination"])->middleware('auth:sanctum');
+
+// Requests endpoints
+Route::get("/requests/user/all", [OrdersController::class, "requestsAll"])->middleware('auth:sanctum');
+Route::get("/requests/user/pagination", [OrdersController::class, "requestsAll"])->middleware('auth:sanctum');
