@@ -11,7 +11,7 @@ use App\Models\Product;
 use App\Models\User;
 use App\Models\Request as Order_request;
 use App\Models\Ordered_Product;
-use App\Models\Request_Product;
+use App\Models\Request_product;
 use Illuminate\Support\Facades\Validator;
 use App\SendEmailTrait;
 use Illuminate\Support\Facades\DB;
@@ -107,7 +107,7 @@ class OrdersController extends Controller
 
                 foreach ($products as $item) {
                     if (!$item->dose_product_missing) {
-                        $record_req_product = Request_Product::create([
+                        $record_req_product = Request_product::create([
                             "request_id" => $request_order->id,
                             "product_id" => $item["product_id"],
                             "price_in_order" => $item["product"]["price"],
