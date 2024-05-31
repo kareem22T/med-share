@@ -179,16 +179,6 @@ class OrdersController extends Controller
             [],
             [$order],
             [
-                "parameters" => [
-                    "note" => "ال status مش مفروضة",
-                    "status" => [
-                        1 => "تحت المراجعة",
-                        2 => "تم التاكيد",
-                        3 => "بداء الشحن",
-                        4 => "اكتمل",
-                        5 => "فشل او الغى",
-                    ]
-                ]
             ]
         );
     }
@@ -212,16 +202,6 @@ class OrdersController extends Controller
             [],
             [$order],
             [
-                "parameters" => [
-                    "note" => "ال status مش مفروضة",
-                    "status" => [
-                        1 => "تحت المراجعة",
-                        2 => "تم التاكيد",
-                        3 => "بداء الشحن",
-                        4 => "اكتمل",
-                        5 => "فشل او الغى",
-                    ]
-                ]
             ]
         );
     }
@@ -266,16 +246,6 @@ class OrdersController extends Controller
             [],
             [$requests],
             [
-                "parameters" => [
-                    "note" => "ال status مش مفروضة",
-                    "status" => [
-                        1 => "تحت المراجعة",
-                        2 => "تم التاكيد",
-                        3 => "بداء الشحن",
-                        4 => "اكتمل",
-                        5 => "فشل او الغى",
-                    ]
-                ]
             ]
         );
     }
@@ -297,16 +267,6 @@ class OrdersController extends Controller
             [],
             [$order],
             [
-                "parameters" => [
-                    "note" => "ال status مش مفروضة",
-                    "status" => [
-                        1 => "تحت المراجعة",
-                        2 => "تم التاكيد",
-                        3 => "بداء الشحن",
-                        4 => "اكتمل",
-                        5 => "فشل او الغى",
-                    ]
-                ]
             ]
         );
     }
