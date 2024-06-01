@@ -9,13 +9,49 @@ use App\SaveImageTrait;
 use App\DeleteImageTrait;
 use App\Models\Product;
 use App\Models\Gallery;
+use App\Models\Wishlist;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class ProductsController extends Controller
 {
     use HandleResponseTrait, SaveImageTrait, DeleteImageTrait;
+
+    public function addIsFavKey($products, $authorization) {
+        $user = null;
+
+        $authorizationHeader = $authorization ? $authorization : false;
+
+        if ($authorizationHeader) {
+            try {
+                // Extract token from the header (assuming 'Bearer' prefix)
+                $hashedTooken = str_replace('Bearer ', '', $authorizationHeader);
+                $token = PersonalAccessToken::findToken($hashedTooken);
+                $user = $token?->tokenable;
+
+            } catch (Exception $e) {
+                // Handle potential exceptions during token validation
+                // Log the error or return an appropriate response
+            }
+        }
+
+        if ($user) {
+            $user_id = $user->id;
+
+            // Add isFav key to each product
+            $products->each(function ($product) use ($user_id) {
+                $product->isFav = Wishlist::where('user_id', $user_id)->where('product_id', $product->id)->exists();
+            });
+        } else {
+            // Add isFav key to each product as false if not logged in
+            $products->each(function ($product) {
+                $product->isFav = false;
+            });
+        }
+        return $products;
+    }
 
     public function create(Request $request) {
         $user = $request->user();
@@ -281,6 +317,7 @@ class ProductsController extends Controller
         $sortWay = $request->sort && $request->sort == "HP" ? "desc" : ( $request->sort && $request->sort  == "LP" ? "asc" : "desc");
 
         $products = Product::with("gallery")->orderBy($sortKey, $sortWay)->paginate($per_page);
+        $products = $this->addIsFavKey($products, $request->header('Authorization'));
 
         return $this->handleResponse(
             true,
@@ -312,6 +349,7 @@ class ProductsController extends Controller
         $sortWay = $request->sort && $request->sort == "HP" ? "desc" : ( $request->sort && $request->sort  == "LP" ? "asc" : "desc");
 
         $products = Product::with("gallery")->orderBy($sortKey, $sortWay)->get();
+        $products = $this->addIsFavKey($products, $request->header('Authorization'));
 
         return $this->handleResponse(
             true,
@@ -344,6 +382,7 @@ class ProductsController extends Controller
         $search = $request->search ? $request->search : '';
 
         $products = Product::where('name', 'like', '%' . $search . '%')->orderBy($sortKey, $sortWay)->paginate($per_page);
+        $products = $this->addIsFavKey($products, $request->header('Authorization'));
 
         return $this->handleResponse(
             true,
