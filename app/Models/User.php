@@ -44,6 +44,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Cart', 'user_id');
     }
 
+    public function fcm_token()
+    {
+        return $this->hasMany('App\Models\FCM', 'user_id');
+    }
+
     public function wishlist()
     {
         return $this->hasMany('App\Models\Wishlist', 'user_id');

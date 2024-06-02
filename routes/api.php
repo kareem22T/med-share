@@ -6,6 +6,7 @@ use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\ProductsController;
 use App\Http\Controllers\User\WishlistController;
+use App\Http\Controllers\User\HomeEndpoints;
 use App\Http\Controllers\User\OrdersController;
 use App\Http\Controllers\User\SuggestionsController;
 
@@ -17,6 +18,7 @@ Route::post('/user/change-password', [AuthController::class, "changePassword"])-
 Route::post('/user/ask-for-forgot-password-email-code', [AuthController::class, "askEmailCodeForgot"]);
 Route::post('/user/forgot-password', [AuthController::class, "forgetPassword"]);
 Route::post('/user/forgot-password-check-code', [AuthController::class, "forgetPasswordCheckCode"]);
+Route::post('/user/save-fcm-token', [AuthController::class, "putUserToken"])->middleware("auth:sanctum");
 Route::get('/user/get', [AuthController::class, "getUser"])->middleware('auth:sanctum');
 Route::post('/user/login', [AuthController::class, "login"]);
 Route::post('/user/update', [AuthController::class, "update"])->middleware('auth:sanctum');
@@ -59,3 +61,5 @@ Route::get("/requests/user/pagination", [OrdersController::class, "requestsAll"]
 // Suggestions endpoints
 Route::post("/suggestions/send", [SuggestionsController::class, "placeSuggestion"]);
 
+// Home endpoints
+Route::get("/home/load-data", [HomeEndpoints::class, "getHomeApi"]);

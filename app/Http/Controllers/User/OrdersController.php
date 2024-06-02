@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\PushNotificationTrait;
 use App\HandleResponseTrait;
 use App\SendEmailTrait;
 use App\Models\Order;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
 {
-    use HandleResponseTrait, SendEmailTrait;
+    use HandleResponseTrait, SendEmailTrait, PushNotificationTrait;
 
     public function placeOrder(Request $request)
     {
@@ -122,6 +123,10 @@ class OrdersController extends Controller
                         $msg_content .= "</h4>";
                     }
                 }
+
+                // if ($user->fcm_token()->first())
+                //     $this->pushNotification("لديك طلب جديد", "لديك طلب جديد بواسطة " . $user->pharmacy_name, $user->fcm_token()->first()->token);
+
                 if ($seller)
                     $send_email = $this->sendEmail($seller->email , "طلب جديد", $msg_content);
 

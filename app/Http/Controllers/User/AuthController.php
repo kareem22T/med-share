@@ -9,6 +9,7 @@ use App\SaveImageTrait;
 use App\DeleteImageTrait;
 use App\SendEmailTrait;
 use App\Models\User;
+use App\Models\FCM;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -670,4 +671,47 @@ class AuthController extends Controller
     public function deleteAllUsers() {
         User::truncate();
     }
+
+    public function putUserToken(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'fcm_token' => ['required'],
+        ], [
+        ]);
+
+        if ($validator->fails()) {
+            return $this->handleResponse(
+                false,
+                "",
+                [$validator->errors()->first()],
+                [],
+                []
+            );
+        }
+
+
+        $user = $request->user();
+
+        $fcm = $user->fcm_token()->first();
+
+        if ($fcm) :
+            $fcm->token = $request->fcm_token;
+            $fcm->save();
+        else:
+            $fcm = FCM::create([
+                "user_id" => $user->id,
+                "token" => $request->fcm_token
+            ]);
+        endif;
+
+        if ($fcm)
+            return $this->handleResponse(
+                true,
+                "عملية ناجحة",
+                [],
+                [],
+                []
+            );
+
+    }
+
 }
