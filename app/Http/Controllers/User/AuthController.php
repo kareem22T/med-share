@@ -73,7 +73,7 @@ class AuthController extends Controller
             "pharmacy_name" => $request->pharmacy_name,
             "email" => $request->email,
             "phone" => $request->phone,
-            "signature" => '/images/uploads/Users/Signature' . $image,
+            "signature" => '/images/uploads/Users/Signature/' . $image,
             "is_phone_verified" => 0,
             "is_email_verified" => 0,
             "password" => Hash::make($request->password),
@@ -559,15 +559,6 @@ class AuthController extends Controller
                         "name" => "الاسم لازم ثلاثي",
                         "general" => "مفيش حاجة مطلوبة انت اللي يتعدل ابعته لو معدلش متبعتش ال key عادي"
                     ],
-                    "user_type" => [
-                        "1" => "تعني مسوق",
-                        "2" => "تعني تاجر",
-                    ],
-                    "joind_with" => [
-                        "1" => "تعني تسجيل يدوي",
-                        "2" => "تعني تسجيل عن طريق جوجل ولا يشترط ارسال كلمة مرور",
-                        "3" => "تعني تسجيل عن طريق فيس بوك ولا يشترط ارسال كلمة مرور",
-                    ]
                 ]
             );
         }
@@ -611,15 +602,6 @@ class AuthController extends Controller
                             "name" => "الاسم لازم ثلاثي",
                             "general" => "مفيش حاجة مطلوبة انت اللي يتعدل ابعته لو معدلش متبعتش ال key عادي"
                         ],
-                        "user_type" => [
-                            "1" => "تعني مسوق",
-                            "2" => "تعني تاجر",
-                        ],
-                        "joind_with" => [
-                            "1" => "تعني تسجيل يدوي",
-                            "2" => "تعني تسجيل عن طريق جوجل ولا يشترط ارسال كلمة مرور",
-                            "3" => "تعني تسجيل عن طريق فيس بوك ولا يشترط ارسال كلمة مرور",
-                        ]
                     ]
                 );
             }
@@ -638,15 +620,6 @@ class AuthController extends Controller
                     "user" => $user->only("name", "pharmacy_name", "email", "phone", "user_type", "picture", "is_email_verified", "is_phone_verified")
                 ],
                 [
-                    "user_type" => [
-                        "1" => "تعني مسوق",
-                        "2" => "تعني تاجر",
-                    ],
-                    "joind_with" => [
-                        "1" => "تعني تسجيل يدوي",
-                        "2" => "تعني تسجيل عن طريق جوجل ولا يشترط ارسال كلمة مرور",
-                        "3" => "تعني تسجيل عن طريق فيس بوك ولا يشترط ارسال كلمة مرور",
-                    ]
                 ]
             );
         }

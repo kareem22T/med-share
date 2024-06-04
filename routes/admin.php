@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\MoneyRequestsContrller;
 use App\Http\Controllers\Admin\BacnnerController;
+use App\Http\Controllers\Admin\PharmaciesController;
 use App\Http\Middleware\GuestAdminMiddleware;
 
 Route::prefix('admin')->group(function () {
@@ -42,9 +43,16 @@ Route::prefix('admin')->group(function () {
             Route::post("/delete", [BacnnerController::class, "delete"])->name("admin.banners.delete");
         });
 
+        Route::prefix('pharmacies')->group(function () {
+            Route::get("/", [PharmaciesController::class, "index"])->name("admin.pharmacies");
+            Route::post("/pharmacy/toggle-approve/{id}", [PharmaciesController::class, "toggleApprove"])->name("admin.pharmacies.pharmacy.toggleApprove");
+        });
+
         // Products
         Route::prefix('products')->group(function () {
             Route::get("/", [ProductsController::class, "index"])->name("admin.products.show");
+            Route::get("/product/{id}", [ProductsController::class, "product"])->name("admin.products.product.details");
+            Route::post("/product/toggle-approve/{id}", [ProductsController::class, "toggleApprove"])->name("admin.products.product.toggleApprove");
             Route::get("/toggle-disc/{id}", [ProductsController::class, "toggleProductDiscounted"])->name("admin.products.toggleDis");
             Route::get("/get", [ProductsController::class, "get"])->name("admin.products.get");
             Route::get("/create", [ProductsController::class, "add"])->name("admin.products.add");

@@ -19,7 +19,6 @@
                     <tr>
                         <th>Ordered by</th>
                         <th>Sub Total</th>
-                        <th>Status</th>
                         <th>Date</th>
                         <th>Actions</th>
                     </tr>
@@ -29,7 +28,6 @@
                         <tr>
                             <td>{{ $order->buyer->name }}</td>
                             <td>{{ $order->sub_total }}</td>
-                            <td>{{ $order->status == 1 ? "Under Review" : ($order->status == 2 ? "Confirmed" : ($order->status == 3 ? "On Shipping" : ($order->status == 4 ? "Completed" : ($order->status == 0 ? "Canceled" : "Undifiened")))) }}</td>
                             <td>{{ $order->created_at }}</td>
                             <td>
                                 <a href="{{ route("admin.orders.order.details", ["id" => $order->id]) }}" class="btn btn-success">Show</a>

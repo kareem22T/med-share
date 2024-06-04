@@ -176,21 +176,11 @@
                 </div>
             </li>
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ route('admin.products.show')}}">
                     <i class="fas fa-fw fa-box"></i>
-                    <span>Products</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ route("admin.products.show") }}">Preview</a>
-                        <a class="collapse-item" href="{{ route("admin.products.add") }}">Add</a>
-                    </div>
-                </div>
+                    <span>Products</span></a>
             </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
 
             <!-- Divider -->
             <hr class="sidebar-divider">
@@ -200,41 +190,22 @@
                 Manage Transactions
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#heading3"
-                    aria-expanded="true" aria-controls="heading3">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ route('admin.orders.show.all')}}">
                     <i class="fas fa-fw fa-receipt"></i>
-                    <span>Orders</span>
-                </a>
-                <div id="heading3" class="collapse" aria-labelledby="heading3" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ route("admin.orders.show.all") }}">All</a>
-                        {{-- <a class="collapse-item" href="{{ route("admin.orders.show.review") }}">Under review</a>
-                        <a class="collapse-item" href="{{ route("admin.orders.show.confirmed") }}">Confirmed</a>
-                        <a class="collapse-item" href="{{ route("admin.orders.show.delivary") }}">On delivery</a>
-                        <a class="collapse-item" href="{{ route("admin.orders.show.completed") }}">Completed</a>
-                        <a class="collapse-item" href="{{ route("admin.orders.show.canceled") }}">Canceled</a> --}}
-                    </div>
-                </div>
+                    <span>Orders</span></a>
             </li>
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#heading4"
-                    aria-expanded="true" aria-controls="heading3">
-                    <i class="fas fa-fw fa-money-bill"></i>
-                    <span>Requests</span>
-                </a>
-                <div id="heading4" class="collapse" aria-labelledby="heading3" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ route("admin.requests.show.all") }}">All</a>
-                        <a class="collapse-item" href="{{ route("admin.requests.show.review") }}">Under review</a>
-                        <a class="collapse-item" href="{{ route("admin.requests.show.completed") }}">Completed</a>
-                        <a class="collapse-item" href="{{ route("admin.requests.show.canceled") }}">Canceled</a>
-                    </div>
-                </div>
+            <div class="sidebar-heading">
+                Manage Users
+            </div>
+
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ route('admin.pharmacies')}}">
+                    <i class="fas fa-fw fa-receipt"></i>
+                    <span>Pharmacies</span></a>
             </li>
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

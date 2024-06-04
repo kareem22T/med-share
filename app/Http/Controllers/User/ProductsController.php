@@ -316,7 +316,7 @@ class ProductsController extends Controller
         $sortKey =($request->sort && $request->sort == "HP") || ( $request->sort && $request->sort == "LP") ? "price" :"created_at";
         $sortWay = $request->sort && $request->sort == "HP" ? "desc" : ( $request->sort && $request->sort  == "LP" ? "asc" : "desc");
 
-        $products = Product::with("gallery")->orderBy($sortKey, $sortWay)->paginate($per_page);
+        $products = Product::with("gallery")->where("isApproved", true)->orderBy($sortKey, $sortWay)->paginate($per_page);
         $products = $this->addIsFavKey($products, $request->header('Authorization'));
 
         return $this->handleResponse(
@@ -348,7 +348,7 @@ class ProductsController extends Controller
         $sortKey =($request->sort && $request->sort == "HP") || ( $request->sort && $request->sort == "LP") ? "price" :"created_at";
         $sortWay = $request->sort && $request->sort == "HP" ? "desc" : ( $request->sort && $request->sort  == "LP" ? "asc" : "desc");
 
-        $products = Product::with("gallery")->orderBy($sortKey, $sortWay)->get();
+        $products = Product::with("gallery")->where("isApproved", true)->orderBy($sortKey, $sortWay)->get();
         $products = $this->addIsFavKey($products, $request->header('Authorization'));
 
         return $this->handleResponse(
@@ -381,7 +381,7 @@ class ProductsController extends Controller
         $sortWay = $request->sort && $request->sort == "HP" ? "desc" : ( $request->sort && $request->sort  == "LP" ? "asc" : "desc");
         $search = $request->search ? $request->search : '';
 
-        $products = Product::where('name', 'like', '%' . $search . '%')->orderBy($sortKey, $sortWay)->paginate($per_page);
+        $products = Product::where('name', 'like', '%' . $search . '%')->where("isApproved", true)->orderBy($sortKey, $sortWay)->paginate($per_page);
         $products = $this->addIsFavKey($products, $request->header('Authorization'));
 
         return $this->handleResponse(

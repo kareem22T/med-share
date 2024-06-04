@@ -40,9 +40,9 @@ class OrdersController extends Controller
     public function order($id) {
         $order = Order::with(["products" => function ($q) {
             $q->with(["product" => function ($q) {
-                $q->with("category");
+                $q->with("postedBy");
             }]);
-        }, "user"])->find($id);
+        }, "buyer"])->find($id);
         if ($order)
             return view("Admin.orders.order")->with(compact("order"));
 

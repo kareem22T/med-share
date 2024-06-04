@@ -26,6 +26,7 @@
                         <th>Price</th>
                         <th>Quantity</th>
                         <th>Posted By</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,6 +36,9 @@
                             <td>{{ $prod->price }}</td>
                             <td>{{ $prod->quantity }}</td>
                             <td>{{ $prod->postedBy->name }}</td>
+                            <td>
+                                <a href="{{ route("admin.products.product.details", ["id" => $prod->id]) }}" class="btn btn-success">Show</a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

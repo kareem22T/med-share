@@ -15,6 +15,7 @@ class Product extends Model
         'discount',
         'quantity',
         'expired_at',
+        'isApproved',
     ];
 
     public function gallery()

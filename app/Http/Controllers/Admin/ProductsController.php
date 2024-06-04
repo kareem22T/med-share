@@ -19,6 +19,31 @@ class ProductsController extends Controller
         return view('Admin.products.index');
     }
 
+    public function product($id) {
+        $prod = Product::find($id);
+        if ($prod)
+            return view("Admin.products.product")->with(compact("prod"));
+
+        return $this->handleResponse(
+            false,
+            "",
+            ["Invalid Product id"],
+            [],
+            []
+        );
+    }
+
+    public function toggleApprove($id) {
+        $prod = Product::find($id);
+
+        if ($prod) {
+            $prod->isApproved = !$prod->isApproved;
+            $prod->save();
+        }
+
+        return redirect()->back();
+    }
+
     public function add() {
         return view("Admin.products.create");
     }
