@@ -585,6 +585,10 @@ class AuthController extends Controller
                     $user->is_phone_verified = false;
             }
 
+            if ($request->pharmacy_name) {
+                $user->pharmacy_name = $request->pharmacy_name;
+            }
+
             if ($request->picture) {
                 $image = $this->saveImg($request->picture, 'images/uploads/Users', "user_" . $user->id);
                 $user->picture = '/images/uploads/Users/' . $image;
@@ -631,7 +635,7 @@ class AuthController extends Controller
                 "عملية ناجحة",
                 [],
                 [
-                    "user" => $user->only("name", "email", "phone", "user_type", "picture", "is_email_verified", "is_phone_verified")
+                    "user" => $user->only("name", "pharmacy_name", "email", "phone", "user_type", "picture", "is_email_verified", "is_phone_verified")
                 ],
                 [
                     "user_type" => [
