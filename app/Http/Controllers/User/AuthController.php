@@ -533,10 +533,12 @@ class AuthController extends Controller
     }
 
     public function update(Request $request) {
+        $user = $request->user();
+
         $validator = Validator::make($request->all(), [
             'picture' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             "name" => ['regex:/^[\p{L} ]{3,}\s[\p{L} ]{3,}\s[\p{L} ]{3,}$/u'],
-            "phone" => ["unique:users,phone"],
+            "phone" => ["unique:users,phone," . $user->id],
         ], [
             "name.required" => "ادخل اسمك الثلاثي",
             "name.regex" => "ادخل الاسم ثلاثي",
