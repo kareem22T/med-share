@@ -112,7 +112,7 @@ class ProductsController extends Controller
         ]);
 
         foreach ($request->file('images') as $img) {
-            $image = $this->saveImg($img, 'images/uploads/Products');
+            $image = $this->saveImg($img, 'images/uploads/Products', "product_" . $product->id);
             $gallery = Gallery::create([
                 "path" => '/images/uploads/Products/' . $image,
                 "product_id" => $product->id
