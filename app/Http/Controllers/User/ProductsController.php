@@ -91,7 +91,6 @@ class ProductsController extends Controller
                 []
             );
         }
-        return $request->images;
 
         if (collect($request->file('images'))->count() < 4) {
             return $this->handleResponse(
@@ -112,14 +111,12 @@ class ProductsController extends Controller
             'expired_at' => Carbon::parse($request->expired_at),
         ]);
 
-        if ($request->images && $product) {
-            foreach ($request->images as $img) {
-                $image = $this->saveImg($img, 'images/uploads/Products');
-                $gallery = Gallery::create([
-                    "path" => '/images/uploads/Products/' . $image,
-                    "product_id" => $product->id
-                ]);
-            }
+        foreach ($request->file('images') as $img) {
+            $image = $this->saveImg($img, 'images/uploads/Products');
+            $gallery = Gallery::create([
+                "path" => '/images/uploads/Products/' . $image,
+                "product_id" => $product->id
+            ]);
         }
 
 
