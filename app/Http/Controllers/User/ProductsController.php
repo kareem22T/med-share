@@ -91,6 +91,7 @@ class ProductsController extends Controller
                 []
             );
         }
+        return $request->images;
 
         if (collect($request->file('images'))->count() < 4) {
             return $this->handleResponse(
