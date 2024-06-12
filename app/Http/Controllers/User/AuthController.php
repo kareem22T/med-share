@@ -88,7 +88,7 @@ class AuthController extends Controller
                 "تم انشاء حسابك بنجاح",
                 [],
                 [
-                    "user" => $user->only("name", "email", "phone", "is_email_verified", "is_phone_verified"),
+                    "user" => $user->only("name", "email", "phone", "is_email_verified", "is_phone_verified", "lat", "lng"),
                     "token" => $token
                 ],
                 []
@@ -507,7 +507,7 @@ class AuthController extends Controller
                     "تم التسجيل بنجاح",
                     [],
                     [
-                        "user" => $userManual->only("name", "email", "phone", "user_type", "picture", "is_email_verified", "is_phone_verified"),
+                        "user" => $userManual->only("name", "email", "phone", "user_type", "picture", "is_email_verified", "lat", "lng"),
                         "token" => $token
                     ],
                     [
@@ -595,7 +595,7 @@ class AuthController extends Controller
                     "تم تحديث البيانات بنجاح",
                     [],
                     [
-                        "user" => $user->only("name", "email", "phone", "user_type", "picture", "is_email_verified", "is_phone_verified")
+                        "user" => $user->only("name", "email", "phone", "user_type", "picture", "is_email_verified", "lat", "lng")
                     ],
                     [
                         "validation" => [
@@ -619,7 +619,7 @@ class AuthController extends Controller
                 "عملية ناجحة",
                 [],
                 [
-                    "user" => $user->only("name", "pharmacy_name", "email", "phone", "user_type", "picture", "is_email_verified", "is_phone_verified")
+                    "user" => $user->only("name", "pharmacy_name", "email", "phone", "user_type", "picture", "is_email_verified", "lat", "lng")
                 ],
                 [
                 ]
