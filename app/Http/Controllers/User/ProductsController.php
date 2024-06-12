@@ -18,6 +18,45 @@ use Laravel\Sanctum\PersonalAccessToken;
 class ProductsController extends Controller
 {
     use HandleResponseTrait, SaveImageTrait, DeleteImageTrait;
+    private function calculateDistance($products, $authorization) {
+        $user = null;
+
+        $authorizationHeader = $authorization ? $authorization : false;
+
+        if ($authorizationHeader) {
+          try {
+            // Extract token from the header (assuming 'Bearer' prefix)
+            $hashedToken = str_replace('Bearer ', '', $authorizationHeader);
+            $token = PersonalAccessToken::findToken($hashedToken);
+            $user = $token ? $token->tokenable : null; // Set user to null if token not found
+
+          } catch (Exception $e) {
+            // Handle potential exceptions during token validation
+            // Log the error or return an appropriate response
+          }
+        }
+
+        // Check if user is retrieved successfully before using it
+        if ($user) {
+          // Assuming you have the Haversine formula implementation or can use a library
+
+          $products->each(function ($product) use ($user) {
+                $earthRadius = 6371; // Earth radius in kilometers
+                $deltaLat = deg2rad($product->postedBy->lat - $user->lat);
+                $deltaLng = deg2rad($product->postedBy->lng - $user->lng);
+                $a = sin($deltaLat / 2) * sin($deltaLat / 2) +
+                cos( $user->lat) * cos($product->postedBy->lat) *
+                sin($deltaLng / 2) * sin($deltaLng / 2);
+
+                $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+                $distance = $earthRadius * $c;
+                $product->distance = $distance;
+            });
+        }
+
+        return $products;
+    }
 
     public function addIsFavKey($products, $authorization) {
         $user = null;
@@ -69,12 +108,11 @@ class ProductsController extends Controller
             "quantity" => ["required", "numeric"],
             "price" => ["required", "numeric"],
             "discount" => ["numeric"],
-            "expired_at" => ["required", "date"],
+            'expired_at' => ['required'],
             'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             "name.required" => "ادخل اسم المنتج",
             "expired_at.required" => "ادخل تاريخ الانتهاء",
-            "expired_at.date" => "يجب ان يكون تاريخ الانتهاء بصيغى تاريخ صحيحة",
             "quantity.required" => "ادخل الكمية المتاحة من المنتج",
             "price.required" => "ادخل سعر المنتج المنتج",
             "images.required" => "يجب ان ترفع ما لايقل عن 4 صور لكل منتج ",
@@ -311,11 +349,16 @@ class ProductsController extends Controller
     public function get(Request $request) {
         $per_page = $request->per_page ? $request->per_page : 10;
 
-        $sortKey =($request->sort && $request->sort == "HP") || ( $request->sort && $request->sort == "LP") ? "price" :"created_at";
-        $sortWay = $request->sort && $request->sort == "HP" ? "desc" : ( $request->sort && $request->sort  == "LP" ? "asc" : "desc");
+        $sortKey = ($request->sort && $request->sort == "HP") || ($request->sort && $request->sort == "LP") ? "price" : "created_at";
+        $sortWay = $request->sort && $request->sort == "HP" ? "desc" : ($request->sort && $request->sort == "LP" ? "asc" : "desc");
 
-        $products = Product::with("gallery")->where("isApproved", true)->orderBy($sortKey, $sortWay)->paginate($per_page);
+        $products = Product::with("gallery")
+            ->where("isApproved", true)
+            ->orderBy($sortKey, $sortWay)
+            ->paginate($per_page);
+
         $products = $this->addIsFavKey($products, $request->header('Authorization'));
+        $products = $this->calculateDistance($products, $request->header('Authorization'));
 
         return $this->handleResponse(
             true,
@@ -348,6 +391,7 @@ class ProductsController extends Controller
 
         $products = Product::with("gallery")->where("isApproved", true)->orderBy($sortKey, $sortWay)->get();
         $products = $this->addIsFavKey($products, $request->header('Authorization'));
+        $products = $this->calculateDistance($products, $request->header('Authorization'));
 
         return $this->handleResponse(
             true,
@@ -379,8 +423,9 @@ class ProductsController extends Controller
         $sortWay = $request->sort && $request->sort == "HP" ? "desc" : ( $request->sort && $request->sort  == "LP" ? "asc" : "desc");
         $search = $request->search ? $request->search : '';
 
-        $products = Product::where('name', 'like', '%' . $search . '%')->where("isApproved", true)->orderBy($sortKey, $sortWay)->paginate($per_page);
+        $products = Product::with("gallery")->where('name', 'like', '%' . $search . '%')->where("isApproved", true)->orderBy($sortKey, $sortWay)->paginate($per_page);
         $products = $this->addIsFavKey($products, $request->header('Authorization'));
+        $products = $this->calculateDistance($products, $request->header('Authorization'));
 
         return $this->handleResponse(
             true,

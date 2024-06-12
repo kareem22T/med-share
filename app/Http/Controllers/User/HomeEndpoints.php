@@ -16,6 +16,46 @@ use Laravel\Sanctum\PersonalAccessToken;
 class HomeEndpoints extends Controller
 {
     use HandleResponseTrait;
+    private function calculateDistance($products, $authorization) {
+        $user = null;
+
+        $authorizationHeader = $authorization ? $authorization : false;
+
+        if ($authorizationHeader) {
+          try {
+            // Extract token from the header (assuming 'Bearer' prefix)
+            $hashedToken = str_replace('Bearer ', '', $authorizationHeader);
+            $token = PersonalAccessToken::findToken($hashedToken);
+            $user = $token ? $token->tokenable : null; // Set user to null if token not found
+
+          } catch (Exception $e) {
+            // Handle potential exceptions during token validation
+            // Log the error or return an appropriate response
+          }
+        }
+
+        // Check if user is retrieved successfully before using it
+        if ($user) {
+          // Assuming you have the Haversine formula implementation or can use a library
+
+          $products->each(function ($product) use ($user) {
+                $earthRadius = 6371; // Earth radius in kilometers
+                $deltaLat = deg2rad($product->postedBy->lat - $user->lat);
+                $deltaLng = deg2rad($product->postedBy->lng - $user->lng);
+                $a = sin($deltaLat / 2) * sin($deltaLat / 2) +
+                cos( $user->lat) * cos($product->postedBy->lat) *
+                sin($deltaLng / 2) * sin($deltaLng / 2);
+
+                $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+                $distance = $earthRadius * $c;
+                $product->distance = $distance;
+            });
+        }
+
+        return $products;
+    }
+
 
     public function addIsFavKey($products, $authorization) {
         $user = null;
@@ -58,32 +98,48 @@ class HomeEndpoints extends Controller
     public function getLatestProducts($token) {
         $products = Product::latest()->with("gallery")->limit(15)->get();
 
-        return $products = $this->addIsFavKey($products, $token);
+        $products = $this->addIsFavKey($products, $token);
+        $products = $this->calculateDistance($products, $token);
+        return $products;
     }
 
+    public function getNeartstPharmacies(Request $request) {
+        $user = $request->user();
+
+        // Call the method directly
+        $nearst = $user->nearstPharmacies();
+        return $this->handleResponse(
+            true,
+            "Success",
+            [],
+            $nearst,
+            []
+        );
+    }
     public function getMostSelled($token) {
 
         $completedOrders = Order::with("products")->get();
-        $topProducts = Product::
+        $products = Product::
         withCount('orders')
         ->orderBy('orders_count', 'desc')
         ->limit(10)
         ->get();
 
-        $topProducts = $this->addIsFavKey( $topProducts, $token);
-
-        return $topProducts;
+        $products = $this->addIsFavKey($products, $token);
+        $products = $this->calculateDistance($products, $token);
+        return $products;
     }
     public function getDiscountedProducts($token) {
 
-        $discountedProducts = Product::
+        $products = Product::
         orderBy("discount", "desc")
         ->limit(10)
         ->get();
 
-        $topProducts = $this->addIsFavKey( $discountedProducts, $token);
 
-        return $discountedProducts;
+        $products = $this->addIsFavKey($products, $token);
+        $products = $this->calculateDistance($products, $token);
+        return $products;
     }
 
     public function getHomeApi(Request $request) {

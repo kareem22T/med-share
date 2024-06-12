@@ -693,4 +693,41 @@ class AuthController extends Controller
 
     }
 
+    public function saveLocation(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'lat' => ['required'],
+            'lng' => ['required'],
+        ], [
+        ]);
+
+        if ($validator->fails()) {
+            return $this->handleResponse(
+                false,
+                "",
+                [$validator->errors()->first()],
+                [],
+                []
+            );
+        }
+
+
+        $user = $request->user();
+
+        if ($user) :
+            $user->lat = $request->lat;
+            $user->lng = $request->lng;
+            $user->save();
+        endif;
+
+        if ($user)
+            return $this->handleResponse(
+                true,
+                "عملية ناجحة",
+                [],
+                [],
+                []
+            );
+
+    }
+
 }

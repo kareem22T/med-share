@@ -23,6 +23,7 @@ Route::get('/user/get', [AuthController::class, "getUser"])->middleware('auth:sa
 Route::post('/user/login', [AuthController::class, "login"]);
 Route::post('/user/update', [AuthController::class, "update"])->middleware('auth:sanctum');
 Route::get('/user/logout', [AuthController::class, "logout"])->middleware('auth:sanctum');
+Route::post('/user/save-location', [AuthController::class, "saveLocation"])->middleware('auth:sanctum');
 Route::get('/user/delete-all', [AuthController::class, "deleteAllUsers"]);
 
 // Products endpoints
@@ -63,3 +64,4 @@ Route::post("/suggestions/send", [SuggestionsController::class, "placeSuggestion
 
 // Home endpoints
 Route::get("/home/load-data", [HomeEndpoints::class, "getHomeApi"]);
+Route::get('/user/get-nearst-pharmacies', [HomeEndpoints::class, "getNeartstPharmacies"])->middleware('auth:sanctum');

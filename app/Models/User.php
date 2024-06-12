@@ -32,6 +32,8 @@ class User extends Authenticatable
         'email_last_verfication_code',
         'phone_last_verfication_code_expird_at',
         'email_last_verfication_code_expird_at',
+        'lat',
+        'lng',
     ];
 
     protected $hidden = [
@@ -74,5 +76,19 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Transaction', 'user_id');
     }
+
+    public function nearstPharmacies($limit = 10, $maxDistance = 10)
+    {
+        $haversine = "(6371 * acos(cos(radians($this->lat)) * cos(radians(lat)) * cos(radians(lng) - radians($this->lng)) + sin(radians($this->lat)) * sin(radians(lat))))";
+
+        return User::select('*')
+            ->where("id", "!=", $this->id)
+            ->selectRaw("{$haversine} AS distance")
+            ->whereRaw("{$haversine} <= ?", [$maxDistance])
+            ->orderBy('distance', 'asc')
+            ->take($limit)
+            ->get();
+    }
+
 
 }
