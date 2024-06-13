@@ -70,7 +70,7 @@ class WishlistController extends Controller
 
     public function getWishlist(Request $request) {
         $user = $request->user();
-        $wishlist = $user->wishlist()->with(["product" => function($q) {
+        $wishlist = $user->wishlist()->whereHas('product')->with(["product" => function($q) {
             $q->with(['gallery' => function ($q) {
                 $q->take(1);
             }]);

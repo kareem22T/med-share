@@ -228,7 +228,7 @@ class CartController extends Controller
 
     public function getCartDetails(Request $request) {
         $user = $request->user();
-        $cart = $user->cart()->get();
+        $cart = $user->cart()->whereHas('product')->get();
         $sub_total = 0;
 
         if ($cart->count() > 0)

@@ -28,7 +28,7 @@ class OrdersController extends Controller
         try {
 
             $user = $request->user();
-            $cart = $user->cart()->get();
+            $cart = $user->cart()->whereHas('product')->get();
 
             // check if cart empty
             if (!$cart || $cart->count() === 0)
@@ -171,7 +171,7 @@ class OrdersController extends Controller
         $user = $request->user();
         $status = $request->status;
         $order = $user->orders()->latest()->with(["products" => function ($q) {
-            $q->with(["product" => function ($q) {
+            $q->whereHas('product')->with(["product" => function ($q) {
                 $q->with(["postedBy" =>  function ($q) {
                     $q->select("id", "name", "email", "phone", "signature", "picture");
                 }]);
@@ -194,7 +194,7 @@ class OrdersController extends Controller
         $user = $request->user();
         $status = $request->status;
         $order = $user->orders()->latest()->with(["products" => function ($q) {
-            $q->with(["product" => function ($q) {
+            $q->whereHas('product')->with(["product" => function ($q) {
                 $q->with(["postedBy" =>  function ($q) {
                     $q->select("id", "name", "email", "phone", "signature", "picture");
                 }]);
@@ -213,7 +213,7 @@ class OrdersController extends Controller
 
     public function order($id) {
         $order = Order::with(["products" => function ($q) {
-            $q->with(["product" => function ($q) {
+            $q->whereHas('product')->with(["product" => function ($q) {
                 $q->with(["postedBy" =>  function ($q) {
                     $q->select("id", "name", "email", "phone", "signature", "picture");
                 }]);
@@ -240,7 +240,7 @@ class OrdersController extends Controller
     public function requestsAll(Request $request) {
         $user = $request->user();
         $requests = $user->requests()->latest()->with(["products" => function ($q) {
-            $q->with(["product"]);
+            $q->whereHas('product')->with(["product"]);
         }, "requested_by" => function ($q) {
             $q->select("id", "name", "email", "phone", "signature", "picture");
         }])->get();
@@ -261,7 +261,7 @@ class OrdersController extends Controller
         $user = $request->user();
         $status = $request->status;
         $order = $user->orders()->latest()->with(["products" => function ($q) {
-            $q->with(["product"]);
+            $q->whereHas('product')->with(["product"]);
         }, "requested_by" => function ($q) {
             $q->select("id", "name", "email", "phone", "signature", "picture");
         }])->paginate($per_page);
