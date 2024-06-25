@@ -522,7 +522,7 @@ class AuthController extends Controller
                     []
                 );
             }
-}
+        }
         return $this->handleResponse(
             false,
             "",

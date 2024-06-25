@@ -41,6 +41,7 @@ class OrdersController extends Controller
                 );
 
             $sub_total = 0;
+            $total_after_discount = 0;
             // get cart sub total
             if ($cart->count() > 0)
                 foreach ($cart as $item) {
@@ -49,7 +50,9 @@ class OrdersController extends Controller
                     }])->first();
                     if ($item_product) :
                         $item->total = ((int) $item_product->price * (int) $item->quantity);
+                        $item->price_after_discount = ((int) $item_product->price * (int) $item->quantity) - (((int) $item_product->price * (int) $item->quantity) * ((int) $item_product->discount /100));
                         $sub_total += $item->total;
+                        $total_after_discount += $item->price_after_discount;
                     endif;
                     $item->dose_product_missing = $item_product ? false : true;
                     $item->product = $item_product ?? "This product is missing may deleted!";
@@ -63,7 +66,7 @@ class OrdersController extends Controller
                 "shipping_fees" => 0,
                 "payment_fees" => 0,
                 "sub_total" => $sub_total,
-                "total" => $sub_total,
+                "total" => $total_after_discount,
             ]);
 
             $groupedProducts = [];

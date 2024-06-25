@@ -230,6 +230,7 @@ class CartController extends Controller
         $user = $request->user();
         $cart = $user->cart()->whereHas('product')->get();
         $sub_total = 0;
+        $total_after_discount = 0;
 
         if ($cart->count() > 0)
             foreach ($cart as $item) {
@@ -238,7 +239,9 @@ class CartController extends Controller
                 }])->first();
                 if ($item_product) :
                     $item->total = ((int) $item_product->price * (int) $item->quantity);
+                    $item->price_after_discount = ((int) $item_product->price * (int) $item->quantity) - (((int) $item_product->price * (int) $item->quantity) * ((int) $item_product->discount /100));
                     $sub_total += $item->total;
+                    $total_after_discount += $item->price_after_discount;
                 endif;
                 $item->dose_product_missing = $item_product ? false : true;
                 $item->product = $item_product ?? "This product is missing may deleted!";
