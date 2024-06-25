@@ -249,7 +249,8 @@ class CartController extends Controller
 
         $cartDetails = [
             "products" => $cart,
-            "sub_total" => $sub_total
+            "sub_total" => $sub_total,
+            "total_after_discount" => $total_after_discount,
         ];
 
         return $this->handleResponse(
