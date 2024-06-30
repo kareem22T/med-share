@@ -149,12 +149,19 @@ class OrdersController extends Controller
             }
 
             DB::commit();
+            $order_details = $user->orders()->latest()->with(["products" => function ($q) {
+                $q->whereHas('product')->with(["product" => function ($q) {
+                    $q->with(["postedBy" =>  function ($q) {
+                        $q->select("id", "name", "email", "phone", "signature", "picture");
+                    }]);
+                }]);
+            }])->find($order->id);
 
             return $this->handleResponse(
                 true,
                 "تم ارسال طلبك بنجاح",
                 [],
-                [],
+                $order_details,
                 []
             );
         } catch (\Exception $e) {
