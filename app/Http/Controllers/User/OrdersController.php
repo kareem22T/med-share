@@ -56,6 +56,8 @@ class OrdersController extends Controller
                     endif;
                     $item->dose_product_missing = $item_product ? false : true;
                     $item->product = $item_product ?? "This product is missing may deleted!";
+                    $item_product->quantity = (int) $item_product->quantity - (int) $item->quantity;
+                    $item_product->save();
                 }
 
             $order = Order::create([
