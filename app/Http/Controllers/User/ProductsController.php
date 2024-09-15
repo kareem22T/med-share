@@ -58,6 +58,44 @@ class ProductsController extends Controller
         return $products;
     }
 
+
+    private function calculateDistanceSingle($product, $authorization) {
+        $user = null;
+
+        $authorizationHeader = $authorization ? $authorization : false;
+    
+        if ($authorizationHeader) {
+            try {
+                // Extract token from the header (assuming 'Bearer' prefix)
+                $hashedToken = str_replace('Bearer ', '', $authorizationHeader);
+                $token = PersonalAccessToken::findToken($hashedToken);
+                $user = $token ? $token->tokenable : null; // Set user to null if token not found
+    
+            } catch (\Exception $e) {
+                // Handle potential exceptions during token validation
+                // Log the error or return an appropriate response
+            }
+        }
+    
+        // Check if user is retrieved successfully before using it
+        if ($user) {
+            // Assuming you have the Haversine formula implementation or can use a library
+    
+            $earthRadius = 6371; // Earth radius in kilometers
+            $deltaLat = deg2rad($product->postedBy->lat - $user->lat);
+            $deltaLng = deg2rad($product->postedBy->lng - $user->lng);
+            $a = sin($deltaLat / 2) * sin($deltaLat / 2) +
+                cos($user->lat) * cos($product->postedBy->lat) *
+                sin($deltaLng / 2) * sin($deltaLng / 2);
+    
+            $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+    
+            $distance = $earthRadius * $c;
+            $product->distance = $distance;
+        }
+    
+        return $product;
+    }
     public function addIsFavKey($products, $authorization) {
         $user = null;
 
@@ -583,6 +621,8 @@ class ProductsController extends Controller
         $product = Product::with(["gallery", "postedBy" => function ($q) {
             $q->select("id", "name", "pharmacy_name", "email", "phone", "signature");
         }])->find($request->product_id);
+        $product = $this->calculateDistanceSingle($product, $request->header('Authorization'));
+
 
         if ($product) {
             return $this->handleResponse(
