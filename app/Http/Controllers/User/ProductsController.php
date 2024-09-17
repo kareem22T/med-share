@@ -621,10 +621,11 @@ class ProductsController extends Controller
         $product = Product::with(["gallery", "postedBy" => function ($q) {
             $q->select("id", "name", "pharmacy_name", "email", "phone", "signature");
         }])->find($request->product_id);
-        $product = $this->calculateDistanceSingle($product, $request->header('Authorization'));
 
 
         if ($product) {
+            $product = $this->calculateDistanceSingle($product, $request->header('Authorization'));
+
             return $this->handleResponse(
                 true,
                 "عملية ناجحة",
