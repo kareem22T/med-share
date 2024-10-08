@@ -98,97 +98,73 @@ class ProductsController extends Controller
     // }
 
     //////////////////////////////////////////
+    private const EARTH_RADIUS_KM = 6371;
 
-    private function calculateDistance($products, $authorization) {
-        $user = null;
-    
-        $authorizationHeader = $authorization ? $authorization : false;
-    
-        if ($authorizationHeader) {
-            try {
-                // Extract token from the header (assuming 'Bearer' prefix)
-                $hashedToken = str_replace('Bearer ', '', $authorizationHeader);
-                $token = PersonalAccessToken::findToken($hashedToken);
-                $user = $token ? $token->tokenable : null; // Set user to null if token not found
-            } catch (Exception $e) {
-                // Handle potential exceptions during token validation
-                // Log the error or return an appropriate response
-            }
-        }
-    
-        // Check if user is retrieved successfully before using it
+    public function calculateDistance($products, $authorization)
+    {
+        $user = $this->authenticateUser($authorization);
+
         if ($user) {
-            // Assuming you have the Haversine formula implementation or can use a library
-            $userLat = deg2rad($user->lat);  // Convert user latitude to radians
-            $userLng = deg2rad($user->lng);  // Convert user longitude to radians
-    
-            $products->each(function ($product) use ($userLat, $userLng) {
-                $earthRadius = 6371; // Earth radius in kilometers
-    
-                $productLat = deg2rad($product->postedBy->lat);  // Convert product latitude to radians
-                $productLng = deg2rad($product->postedBy->lng);  // Convert product longitude to radians
-    
-                $deltaLat = $productLat - $userLat;
-                $deltaLng = $productLng - $userLng;
-    
-                $a = sin($deltaLat / 2) * sin($deltaLat / 2) +
-                    cos($userLat) * cos($productLat) *
-                    sin($deltaLng / 2) * sin($deltaLng / 2);
-    
-                $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-    
-                $distance = $earthRadius * $c;
-                $product->distance = $distance;
+            $products->each(function ($product) use ($user) {
+                $product->distance = $this->haversineDistance(
+                    $user->lat,
+                    $user->lng,
+                    $product->postedBy->lat,
+                    $product->postedBy->lng
+                );
             });
         }
-    
+
         return $products;
     }
-    
-    private function calculateDistanceSingle($product, $authorization) {
-        $user = null;
-    
-        $authorizationHeader = $authorization ? $authorization : false;
-    
-        if ($authorizationHeader) {
-            try {
-                // Extract token from the header (assuming 'Bearer' prefix)
-                $hashedToken = str_replace('Bearer ', '', $authorizationHeader);
-                $token = PersonalAccessToken::findToken($hashedToken);
-                $user = $token ? $token->tokenable : null; // Set user to null if token not found
-            } catch (\Exception $e) {
-                // Handle potential exceptions during token validation
-                // Log the error or return an appropriate response
-            }
-        }
-    
-        // Check if user is retrieved successfully before using it
+
+    public function calculateDistanceSingle($product, $authorization)
+    {
+        $user = $this->authenticateUser($authorization);
+
         if ($user) {
-            // Assuming you have the Haversine formula implementation or can use a library
-            $earthRadius = 6371; // Earth radius in kilometers
-    
-            $userLat = deg2rad($user->lat);  // Convert user latitude to radians
-            $userLng = deg2rad($user->lng);  // Convert user longitude to radians
-    
-            $productLat = deg2rad($product->postedBy->lat);  // Convert product latitude to radians
-            $productLng = deg2rad($product->postedBy->lng);  // Convert product longitude to radians
-    
-            $deltaLat = $productLat - $userLat;
-            $deltaLng = $productLng - $userLng;
-    
-            $a = sin($deltaLat / 2) * sin($deltaLat / 2) +
-                cos($userLat) * cos($productLat) *
-                sin($deltaLng / 2) * sin($deltaLng / 2);
-    
-            $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-    
-            $distance = $earthRadius * $c;
-            $product->distance = $distance;
+            $product->distance = $this->haversineDistance(
+                $user->lat,
+                $user->lng,
+                $product->postedBy->lat,
+                $product->postedBy->lng
+            );
         }
-    
+
         return $product;
     }
-    
+
+    private function authenticateUser($authorization)
+    {
+        if (!$authorization) {
+            return null;
+        }
+
+        try {
+            $hashedToken = str_replace('Bearer ', '', $authorization);
+            $token = PersonalAccessToken::findToken($hashedToken);
+            return $token ? $token->tokenable : null;
+        } catch (\Exception $e) {
+            \Log::error('Token authentication failed: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    private function haversineDistance($lat1, $lon1, $lat2, $lon2)
+    {
+        $lat1 = deg2rad($lat1);
+        $lon1 = deg2rad($lon1);
+        $lat2 = deg2rad($lat2);
+        $lon2 = deg2rad($lon2);
+
+        $dlat = $lat2 - $lat1;
+        $dlon = $lon2 - $lon1;
+
+        $a = sin($dlat/2) ** 2 + cos($lat1) * cos($lat2) * sin($dlon/2) ** 2;
+        $c = 2 * atan2(sqrt($a), sqrt(1-$a));
+
+        return self::EARTH_RADIUS_KM * $c;
+    }
     public function addIsFavKey($products, $authorization) {
         $user = null;
 
