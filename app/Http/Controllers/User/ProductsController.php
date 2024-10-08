@@ -115,9 +115,12 @@ class ProductsController extends Controller
                     $product->postedBy->lat,
                     $product->postedBy->lng
                 );
+                $product->user_lat = $user->lat;
+                $product->user_lng = $user->lng;
+                $product->postedby_lat = $product->postedBy->lat;
+                $product->postedby_lng = $product->postedBy->lng;
             });
         }
-
         return $products;
     }
 
@@ -132,6 +135,10 @@ class ProductsController extends Controller
                 $product->postedBy->lat,
                 $product->postedBy->lng
             );
+            $product->user_lat = $user->lat;
+            $product->user_lng = $user->lng;
+            $product->postedby_lat = $product->postedBy->lat;
+            $product->postedby_lng = $product->postedBy->lng;
         }
 
         return $product;
