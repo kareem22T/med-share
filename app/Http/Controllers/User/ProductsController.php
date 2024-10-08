@@ -127,18 +127,18 @@ class ProductsController extends Controller
     public function calculateDistanceSingle($product, $authorization)
     {
         $user = $this->authenticateUser($authorization);
-
+        $postedBy = User::find($product->user_id);
         if ($user) {
             $product->distance = $this->haversineDistance(
                 $user->lat,
                 $user->lng,
-                $product->postedBy->lat,
-                $product->postedBy->lng
+                $postedBy->lat,
+                $postedBy->lng
             );
             $product->user_lat = $user->lat;
             $product->user_lng = $user->lng;
-            $product->postedby_lat = $product->postedBy->lat;
-            $product->postedby_lng = $product->postedBy->lng;
+            $product->postedby_lat = $postedBy->lat;
+            $product->postedby_lng = $postedBy->lng;
         }
 
         return $product;
