@@ -115,10 +115,13 @@ class ProductsController extends Controller
                     $product->postedBy->lat,
                     $product->postedBy->lng
                 );
+                $product->user_lat = $user->lat;
+                $product->user_lng = $user->lng;
+                $product->postedby_lat = $product->postedBy->lat;
+                $product->postedby_lng = $product->postedBy->lng;
             });
         }
-
-        return response()->json([$products, $user->lat, $user->lng, $products->postedBy->lat,$products->postedBy->lng ]);
+        return $products;
     }
 
     public function calculateDistanceSingle($product, $authorization)
@@ -132,9 +135,13 @@ class ProductsController extends Controller
                 $product->postedBy->lat,
                 $product->postedBy->lng
             );
+            $product->user_lat = $user->lat;
+            $product->user_lng = $user->lng;
+            $product->postedby_lat = $product->postedBy->lat;
+            $product->postedby_lng = $product->postedBy->lng;
         }
 
-        return response()->json([$product, $user->lat, $user->lng, $product->postedBy->lat,$product->postedBy->lng ]);
+        return $product;
     }
 
     private function authenticateUser($authorization)
