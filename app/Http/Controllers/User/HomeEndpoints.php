@@ -72,7 +72,7 @@ class HomeEndpoints extends Controller
                 $postedBy->lng,
                 6378.137
                 );
-            $newDistance = ($distance * 0.88) * 1.8;
+            $newDistance = ($distance * 0.88) * 1.5;
             $product->distance = $newDistance;
             });
         }
