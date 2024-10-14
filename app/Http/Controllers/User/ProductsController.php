@@ -109,13 +109,15 @@ class ProductsController extends Controller
 
         if ($user) {
             $products->each(function ($product) use ($user) {
-                $product->distance = $this->haversineDistance(
+                $distance = $this->haversineDistance(
                     $user->lat,
                     $user->lng,
                     $product->postedBy->lat,
                     $product->postedBy->lng,
                     6378.137
                 );
+                $newDistance = ($distance * 0.88) * 1.9;
+                $product->distance = $newDistance;
             });
         }
         return $products;
@@ -126,13 +128,15 @@ class ProductsController extends Controller
         $user = $this->authenticateUser($authorization);
         $postedBy = User::find($product->user_id);
         if ($user) {
-            $product->distance = $this->haversineDistance(
+            $distance = $this->haversineDistance(
                 $user->lat,
                 $user->lng,
                 $postedBy->lat,
                 $postedBy->lng,
                 6378.137
             );
+            $newDistance = ($distance * 0.88) * 1.9;
+            $product->distance = $newDistance;
         }
 
         return $product;
