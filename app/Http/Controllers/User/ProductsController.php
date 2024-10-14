@@ -116,7 +116,7 @@ class ProductsController extends Controller
                     $product->postedBy->lng,
                     6378.137
                 );
-                $newDistance = ($distance * 0.88) * 1.9;
+                $newDistance = ($distance * 0.88) * 1.85;
                 $product->distance = $newDistance;
             });
         }
@@ -135,7 +135,7 @@ class ProductsController extends Controller
                 $postedBy->lng,
                 6378.137
             );
-            $newDistance = ($distance * 0.88) * 1.9;
+            $newDistance = ($distance * 0.88) * 1.85;
             $product->distance = $newDistance;
         }
 
