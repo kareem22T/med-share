@@ -113,7 +113,8 @@ class ProductsController extends Controller
                     $user->lat,
                     $user->lng,
                     $product->postedBy->lat,
-                    $product->postedBy->lng
+                    $product->postedBy->lng,
+                    6378.137
                 );
             });
         }
@@ -129,7 +130,8 @@ class ProductsController extends Controller
                 $user->lat,
                 $user->lng,
                 $postedBy->lat,
-                $postedBy->lng
+                $postedBy->lng,
+                6378.137
             );
         }
 
@@ -152,20 +154,20 @@ class ProductsController extends Controller
         }
     }
 
-    private function haversineDistance($lat1, $lon1, $lat2, $lon2)
+    private function haversineDistance($lat1, $lon1, $lat2, $lon2, $earthRadius = 6371)
     {
         $lat1 = deg2rad($lat1);
         $lon1 = deg2rad($lon1);
         $lat2 = deg2rad($lat2);
         $lon2 = deg2rad($lon2);
-
+    
         $dlat = $lat2 - $lat1;
         $dlon = $lon2 - $lon1;
-
+    
         $a = sin($dlat/2) ** 2 + cos($lat1) * cos($lat2) * sin($dlon/2) ** 2;
         $c = 2 * atan2(sqrt($a), sqrt(1-$a));
-
-        return self::EARTH_RADIUS_KM * $c;
+    
+        return $earthRadius * $c;
     }
     public function addIsFavKey($products, $authorization) {
         $user = null;
