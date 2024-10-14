@@ -65,12 +65,15 @@ class HomeEndpoints extends Controller
             $products->each(function ($product) use ($user) {
                 $postedBy = User::find($product->user_id);
 
-                $product->distance = $this->haversineDistance(
+                $distance = $this->haversineDistance(
                     $user->lat,
                     $user->lng,
                 $postedBy->lat,
-                $postedBy->lng
+                $postedBy->lng,
+                6378.137
                 );
+            $newDistance = ($distance * 0.88) * 1.9;
+            $product->distance = $newDistance;
             });
         }
         return $products;
@@ -93,20 +96,20 @@ class HomeEndpoints extends Controller
         }
     }
 
-    private function haversineDistance($lat1, $lon1, $lat2, $lon2)
+    private function haversineDistance($lat1, $lon1, $lat2, $lon2, $earthRadius = 6371)
     {
         $lat1 = deg2rad($lat1);
         $lon1 = deg2rad($lon1);
         $lat2 = deg2rad($lat2);
         $lon2 = deg2rad($lon2);
-
+    
         $dlat = $lat2 - $lat1;
         $dlon = $lon2 - $lon1;
-
+    
         $a = sin($dlat/2) ** 2 + cos($lat1) * cos($lat2) * sin($dlon/2) ** 2;
         $c = 2 * atan2(sqrt($a), sqrt(1-$a));
-
-        return self::EARTH_RADIUS_KM * $c;
+    
+        return $earthRadius * $c;
     }
 
     public function addIsFavKey($products, $authorization) {
